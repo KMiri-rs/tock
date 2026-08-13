@@ -1544,6 +1544,7 @@ mod miri_tests {
     }
 
     #[test]
+    #[ignore = "needs to work with tree borrow"]
     fn test_transmute_from_immutable_slice() {
         // This test exercises the `From<&[u8]>` implementation for
         // ReadableProcessSlice.

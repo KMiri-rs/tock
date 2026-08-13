@@ -166,3 +166,10 @@ pub unsafe fn main() {
         &main_loop_capability,
     );
 }
+
+#[cfg(miri)]
+#[unsafe(no_mangle)]
+fn miri_start(_argc: isize, _argv: *const *const u8) -> isize {
+    unsafe { main() };
+    0
+}
