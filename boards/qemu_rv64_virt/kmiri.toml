@@ -1,0 +1,13 @@
+total_mem_size = 0x80400000
+
+[layout]
+_stext = 0x80000000
+_etext = 0x8001b600
+_sflash = 0x80000000
+_eflash = 0x80200000
+_sapps = 0x80100000
+_eapps = 0x80200000
+_ssram = 0x80200000
+_esram = 0x80400000
+_sappmem = 0x8021b680
+_eappmem = 0x80400000
