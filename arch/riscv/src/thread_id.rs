@@ -9,6 +9,21 @@ use kernel::platform::chip::ThreadIdProvider;
 /// Implement [`ThreadIdProvider`] for RISC-V.
 pub enum RiscvThreadIdProvider {}
 
+#[cfg(all(
+    miri,
+    any(target_arch = "riscv32", target_arch = "riscv64"),
+    target_os = "none"
+))]
+unsafe impl ThreadIdProvider for RiscvThreadIdProvider {
+    /// Return the current thread ID, computed using the `mhartid` (hardware thread
+    /// ID), and a flag indicating whether the current hart is currently in a trap
+    /// handler context.
+    fn running_thread_id() -> usize {
+        // FIXME: id should consider the bool value of hart_trap_handler_active
+        0
+    }
+}
+
 // # Safety
 //
 // By implementing [`ThreadIdProvider`] we are guaranteeing that we correctly
@@ -19,6 +34,7 @@ pub enum RiscvThreadIdProvider {}
 // The assembly (read `mhartid`, load the `_trap_handler_active` symbol address,
 // read a `usize`) is XLEN-agnostic, so the same code serves both rv32 and rv64.
 #[cfg(all(
+    not(miri),
     any(target_arch = "riscv32", target_arch = "riscv64"),
     target_os = "none"
 ))]
