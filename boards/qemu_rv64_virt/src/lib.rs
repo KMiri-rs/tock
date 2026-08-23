@@ -221,6 +221,7 @@ pub unsafe fn start() -> (
         );
 
     // Basic setup of the RISC-V IMAC platform
+    #[cfg(not(miri))]
     rv64i::configure_trap_handler();
 
     // Initialize deferred calls very early.
@@ -262,7 +263,10 @@ pub unsafe fn start() -> (
     //     ),
     // )
     // .unwrap();
+    #[cfg(not(miri))]
     let pmp = rv64i::pmp::simple::SimplePMP::new().unwrap();
+    #[cfg(miri)]
+    let pmp = rv64i::pmp::simple::SimplePMP::<16>;
 
     // let semihost_params: [usize; 2] = [42, 0]; // exit status = 42
     // rv64i::semihost_command(0x18, semihost_params.as_ptr() as usize, 0);
