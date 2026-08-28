@@ -218,10 +218,12 @@ pub struct Uart16550<'a> {
 
 impl<'a> Uart16550<'a> {
     pub fn new(regs: StaticRef<Uart16550Registers>) -> Uart16550<'a> {
+        kernel::miri_println!("Uart16550::new");
         // Disable all interrupts when constructing the UART
         regs.ier.set(0xF);
 
         regs.iir_fcr.write(FCR::Enable::CLEAR);
+        kernel::miri_println!("Uart16550::new write");
 
         Uart16550 {
             regs,

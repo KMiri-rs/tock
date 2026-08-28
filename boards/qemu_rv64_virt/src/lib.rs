@@ -6,6 +6,7 @@
 
 #![no_std]
 #![no_main]
+#![feature(format_args_nl)]
 
 use capsules_core::virtualizers::virtual_alarm::{MuxAlarm, VirtualMuxAlarm};
 use kernel::ErrorCode;
@@ -313,6 +314,7 @@ pub unsafe fn start() -> (
         qemu_rv64_virt_chip::chip::QemuRv64VirtClint,
         qemu_rv64_virt_chip::chip::QemuRv64VirtClint::new(clint_base)
     );
+    kernel::miri_println!("hardware_timer initialized");
 
     // Create a shared virtualization mux layer on top of a single hardware
     // alarm.

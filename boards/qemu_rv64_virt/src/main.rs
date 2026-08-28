@@ -6,6 +6,7 @@
 
 #![no_std]
 #![no_main]
+#![feature(format_args_nl)]
 
 use kernel::capabilities;
 use kernel::component::Component;
@@ -92,6 +93,7 @@ impl KernelResources<qemu_rv64_virt_lib::ChipHw> for Platform {
 pub unsafe fn main() {
     let main_loop_capability = create_capability!(capabilities::MainLoopCapability);
 
+    kernel::miri_println!("qemu_rv64_virt_lib::start");
     let (board_kernel, base_platform, chip) = qemu_rv64_virt_lib::start();
 
     let screen = base_platform.virtio_gpu_screen.map(|screen| {

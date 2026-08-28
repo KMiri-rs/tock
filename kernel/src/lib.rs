@@ -91,6 +91,7 @@
 
 #![warn(unreachable_pub)]
 #![no_std]
+#![feature(format_args_nl)]
 
 /// Kernel major version.
 ///
@@ -194,3 +195,21 @@ pub use crate::errorcode::ErrorCode;
 pub use crate::kernel::Kernel;
 pub use crate::process::ProcessId;
 pub use crate::scheduler::Scheduler;
+
+unsafe extern "Rust" {
+    pub fn miri_write_to_stdout(bytes: &[u8]);
+}
+
+#[macro_export]
+macro_rules! miri_println {
+    () => {
+        #[cfg(miri)]
+        unsafe { $crate::miri_write_to_stdout("\n".as_bytes()) };
+    };
+    ($($arg:tt)*) => {
+        #[cfg(miri)]
+        unsafe {
+            $crate::miri_write_to_stdout(::core::format_args_nl!($($arg)*).as_str().unwrap().as_bytes())
+        }
+    };
+}
