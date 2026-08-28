@@ -42,16 +42,16 @@ pub struct QemuRv64VirtDefaultPeripherals<'a> {
 impl QemuRv64VirtDefaultPeripherals<'_> {
     pub fn new() -> Self {
         Self {
-            uart0: qemu_virt_chip::uart::Uart16550::new(crate::uart::UART0_BASE),
+            uart0: qemu_virt_chip::uart::Uart16550::new(crate::uart::uart0_base()),
             virtio_mmio: [
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_0_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_1_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_2_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_3_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_4_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_5_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_6_BASE),
-                VirtIOMMIODevice::new(crate::virtio_mmio::VIRTIO_MMIO_7_BASE),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_0_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_1_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_2_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_3_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_4_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_5_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_6_base()),
+                VirtIOMMIODevice::new(crate::virtio_mmio::virtio_mmio_7_base()),
             ],
         }
     }

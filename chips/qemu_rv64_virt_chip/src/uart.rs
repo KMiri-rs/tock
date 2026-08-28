@@ -10,8 +10,9 @@ use kernel::utilities::io_write::IoWrite;
 use qemu_virt_chip::uart::Uart16550;
 use qemu_virt_chip::uart::Uart16550Registers;
 
-pub const UART0_BASE: StaticRef<Uart16550Registers> =
-    unsafe { StaticRef::new(0x1000_0000 as *const Uart16550Registers) };
+pub fn uart0_base() -> StaticRef<Uart16550Registers> {
+    unsafe { StaticRef::new(0x1000_0000 as *const Uart16550Registers) }
+}
 
 /// A synchronous writer for the QEMU RV32 useful for panics.
 ///
@@ -56,7 +57,7 @@ impl kernel::platform::chip::PanicWriter for UartPanicWriter<'_> {
     unsafe fn create_panic_writer(config: Self::Config) -> impl IoWrite + core::fmt::Write {
         use hil::uart::Configure as _;
 
-        let inner = Uart16550::new(UART0_BASE);
+        let inner = Uart16550::new(uart0_base());
         let _ = inner.configure(config.params);
         UartPanicWriter { inner }
     }

@@ -1,3 +1,4 @@
+page_table = false
 total_mem_size = 0x80400000
 
 [layout]
@@ -11,3 +12,60 @@ _ssram = 0x80200000
 _esram = 0x80400000
 _sappmem = 0x8021b680
 _eappmem = 0x80400000
+
+# See `UART0_BASE` at chips/qemu_rv64_virt_chip/src/uart.rs and `Uart16550Registers`
+# Ref: https://wiki.osdev.org/Serial_Ports#Port_Addresses
+[[kalloc]]
+name = "Uart0"
+base_addr = 0x10000000
+size = 0x7
+align = 0x1
+
+# See `clint_base` at chips/qemu_rv64_virt_chip/src/clint.rs
+[[kalloc]]
+name = "Clint"
+base_addr = 0x2000000
+size = 0xC000
+align = 0x4
+
+# See chips/qemu_rv64_virt_chip/src/virtio_mmio.rs
+[[kalloc]]
+name = "VirtioMmio0"
+base_addr = 0x1000_1000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio1"
+base_addr = 0x1000_2000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio2"
+base_addr = 0x1000_3000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio3"
+base_addr = 0x1000_4000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio4"
+base_addr = 0x1000_5000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio5"
+base_addr = 0x1000_6000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio6"
+base_addr = 0x1000_7000
+size = 0x1A0
+align = 0x4
+[[kalloc]]
+name = "VirtioMmio7"
+base_addr = 0x1000_8000
+size = 0x1A0
+align = 0x4
