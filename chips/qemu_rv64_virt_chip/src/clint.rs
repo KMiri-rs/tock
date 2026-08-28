@@ -7,5 +7,7 @@
 use kernel::utilities::StaticRef;
 use sifive::clint::ClintRegisters;
 
-pub const CLINT_BASE: StaticRef<ClintRegisters> =
-    unsafe { StaticRef::new(0x0200_0000 as *const ClintRegisters) };
+pub type StaticRefClintRegisters = StaticRef<ClintRegisters>;
+pub fn clint_base() -> StaticRefClintRegisters {
+    unsafe { StaticRef::new(0x0200_0000 as *const ClintRegisters) }
+}

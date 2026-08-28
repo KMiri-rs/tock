@@ -305,9 +305,13 @@ pub unsafe fn start() -> (
         .finalize(components::uart_mux_component_static!());
 
     // Use the RISC-V machine timer timesource
+    let clint_base = static_init!(
+        qemu_rv64_virt_chip::clint::StaticRefClintRegisters,
+        qemu_rv64_virt_chip::clint::clint_base()
+    );
     let hardware_timer = static_init!(
         qemu_rv64_virt_chip::chip::QemuRv64VirtClint,
-        qemu_rv64_virt_chip::chip::QemuRv64VirtClint::new(&qemu_rv64_virt_chip::clint::CLINT_BASE)
+        qemu_rv64_virt_chip::chip::QemuRv64VirtClint::new(clint_base)
     );
 
     // Create a shared virtualization mux layer on top of a single hardware
