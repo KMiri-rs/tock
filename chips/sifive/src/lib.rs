@@ -5,6 +5,7 @@
 //! Implementations for generic SiFive MCU peripherals.
 
 #![no_std]
+#![feature(format_args_nl)]
 
 pub mod clint;
 pub mod gpio;
