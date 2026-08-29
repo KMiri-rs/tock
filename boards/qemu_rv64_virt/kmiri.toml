@@ -82,3 +82,15 @@ name = "Plic"
 base_addr = 0x0c00_0000
 size = 0x200008
 align = 0x4
+
+# See boards/qemu_rv64_virt/src/main.rs
+[[kalloc]]
+name = "_sapps.._eapps"
+base_addr = 0x80100000
+size = 0x100000
+align = 0x1
+[[kalloc]]
+name = "_sappmem.._eappmem"
+base_addr = 0x8021b680
+size = 0x1e4980
+align = 0x1
