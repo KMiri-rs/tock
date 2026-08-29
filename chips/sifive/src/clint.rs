@@ -37,7 +37,6 @@ pub struct Clint<'a, F: Frequency> {
 
 impl<'a, F: Frequency> Clint<'a, F> {
     pub fn new(base: &'a StaticRef<ClintRegisters>) -> Self {
-        kernel::miri_println!("Clint::new");
         Self {
             registers: *base,
             client: OptionalCell::empty(),
