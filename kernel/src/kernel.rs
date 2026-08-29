@@ -424,7 +424,13 @@ impl Kernel {
         resources.watchdog().setup();
         // Before we begin, verify that deferred calls were soundly setup.
         DeferredCall::verify_setup();
+
+        let mut count = 0;
         loop {
+            count += 1;
+            if count > 10 {
+                panic!("kernel just normally exits here");
+            }
             self.kernel_loop_operation(resources, chip, ipc, false, capability);
         }
     }

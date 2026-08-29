@@ -91,6 +91,7 @@
 
 #![warn(unreachable_pub)]
 #![no_std]
+#![feature(core_intrinsics)]
 
 /// Kernel major version.
 ///

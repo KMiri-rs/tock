@@ -123,6 +123,10 @@ impl<'a, I: InterruptService + 'a> Chip for QemuRv64VirtChip<'a, I> {
     }
 
     fn service_pending_interrupts(&self) {
+        // KMiri: do nothing.
+        #[cfg(miri)]
+        return;
+
         loop {
             let mip = CSR.mip.extract();
 
@@ -148,6 +152,10 @@ impl<'a, I: InterruptService + 'a> Chip for QemuRv64VirtChip<'a, I> {
     }
 
     fn has_pending_interrupts(&self) -> bool {
+        // KMiri: early return because interrupts are not supported yet.
+        #[cfg(miri)]
+        return false;
+
         // First check if the global machine timer interrupt is set.
         // We would also need to check for additional global interrupt bits
         // if there were to be used for anything in the future.
@@ -160,6 +168,9 @@ impl<'a, I: InterruptService + 'a> Chip for QemuRv64VirtChip<'a, I> {
     }
 
     fn sleep(&self) {
+        #[cfg(miri)]
+        return;
+
         unsafe {
             rv64i::support::wfi();
         }

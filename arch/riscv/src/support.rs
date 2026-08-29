@@ -29,6 +29,10 @@ pub unsafe fn with_interrupts_disabled<F, R>(f: F) -> R
 where
     F: FnOnce() -> R,
 {
+    // KMiri: interrupts are not suppoted yet, so just immediately do the callback.
+    #[cfg(miri)]
+    return f();
+
     // Read the mstatus MIE field and disable machine mode interrupts
     // atomically
     //
