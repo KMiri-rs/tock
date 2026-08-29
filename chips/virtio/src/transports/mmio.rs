@@ -172,11 +172,13 @@ impl VirtIOMMIODevice {
     /// is present at this MMIO address currently.
     pub fn query(&self) -> Result<VirtIODeviceType, u32> {
         // Verify that we are talking to a VirtIO MMIO device...
+        #[cfg(not(miri))]
         if self.regs.magic_value.get() != u32::from_le_bytes(VIRTIO_MAGIC_VALUE) {
             panic!("Not a VirtIO MMIO device");
         }
 
         // with version 2
+        #[cfg(not(miri))]
         if self.regs.device_version.get() != 0x0002 {
             panic!(
                 "Unknown VirtIO MMIO device version: {}",

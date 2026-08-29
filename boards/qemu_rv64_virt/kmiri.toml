@@ -69,3 +69,8 @@ name = "VirtioMmio7"
 base_addr = 0x1000_8000
 size = 0x1A0
 align = 0x4
+[[kalloc]]
+name = "Plic"
+base_addr = 0x0c00_0000
+size = 0x200008
+align = 0x4
