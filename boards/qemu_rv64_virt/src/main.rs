@@ -6,7 +6,6 @@
 
 #![no_std]
 #![no_main]
-#![feature(format_args_nl)]
 
 use kernel::capabilities;
 use kernel::component::Component;

@@ -8,7 +8,7 @@ use kernel::debug;
 use kernel::hil::uart;
 
 /// Panic handler.
-#[cfg(not(test))]
+#[cfg(all(not(test), not(miri)))]
 #[panic_handler]
 pub unsafe fn panic_fmt(pi: &PanicInfo) -> ! {
     debug::panic_print::<qemu_rv64_virt_chip::uart::UartPanicWriter, _, _>(
@@ -32,4 +32,16 @@ pub unsafe fn panic_fmt(pi: &PanicInfo) -> ! {
 
     // To satisfy the ! return type constraints.
     loop {}
+}
+
+#[cfg(all(not(test), miri))]
+#[panic_handler]
+unsafe fn panic_fmt(pi: &PanicInfo) -> ! {
+    let msg = pi.message();
+    if let Some(loc) = pi.location() {
+        kernel::miri_println!("Panic at `{loc:?}`:\n{msg}");
+    } else {
+        kernel::miri_println!("Panic: {msg}");
+    }
+    core::intrinsics::abort()
 }

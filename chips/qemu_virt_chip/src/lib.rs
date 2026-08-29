@@ -4,7 +4,6 @@
 
 //! Peripherals for the qemu-system-riscv* virt machines
 
-#![feature(format_args_nl)]
 #![forbid(unsafe_code)]
 #![no_std]
 

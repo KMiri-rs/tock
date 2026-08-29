@@ -6,7 +6,7 @@
 
 #![no_std]
 #![no_main]
-#![feature(format_args_nl)]
+#![feature(core_intrinsics)]
 
 use capsules_core::virtualizers::virtual_alarm::{MuxAlarm, VirtualMuxAlarm};
 use kernel::ErrorCode;
