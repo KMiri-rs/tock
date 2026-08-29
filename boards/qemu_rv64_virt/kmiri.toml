@@ -9,9 +9,17 @@ _eflash = 0x80200000
 _sapps = 0x80100000
 _eapps = 0x80200000
 _ssram = 0x80200000
+_sstack = 0x80200000
+_estack = 0x80208000
+_srodata = 0x80018648
+_erodata = 0x80025200
+_srelocate = 0x80208000
+_erelocate = 0x80208000
 _esram = 0x80400000
 _sappmem = 0x8021b680
 _eappmem = 0x80400000
+_szero = 0x80208000
+_ezero = 0x8021b68c
 
 # See `UART0_BASE` at chips/qemu_rv64_virt_chip/src/uart.rs and `Uart16550Registers`
 # Ref: https://wiki.osdev.org/Serial_Ports#Port_Addresses
