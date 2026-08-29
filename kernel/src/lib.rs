@@ -91,7 +91,6 @@
 
 #![warn(unreachable_pub)]
 #![no_std]
-#![feature(format_args_nl)]
 
 /// Kernel major version.
 ///
@@ -196,20 +195,29 @@ pub use crate::kernel::Kernel;
 pub use crate::process::ProcessId;
 pub use crate::scheduler::Scheduler;
 
-unsafe extern "Rust" {
-    pub fn miri_write_to_stdout(bytes: &[u8]);
+#[doc(hidden)]
+pub struct MiriPrint;
+impl core::fmt::Write for MiriPrint {
+    fn write_str(&mut self, s: &str) -> ::core::fmt::Result {
+        unsafe extern "Rust" {
+            #[allow(dead_code)]
+            fn miri_write_to_stdout(bytes: &[u8]);
+        }
+
+        unsafe { miri_write_to_stdout(s.as_bytes()) };
+        ::core::result::Result::Ok(())
+    }
 }
 
 #[macro_export]
 macro_rules! miri_println {
-    () => {
-        #[cfg(miri)]
-        unsafe { $crate::miri_write_to_stdout("\n".as_bytes()) };
-    };
     ($($arg:tt)*) => {
         #[cfg(miri)]
-        unsafe {
-            $crate::miri_write_to_stdout(::core::format_args_nl!($($arg)*).as_str().unwrap().as_bytes())
+        {
+            use ::core::fmt::Write;
+            let print = &mut $crate::MiriPrint;
+            let _ = ::core::write!(print, $($arg)*);
+            let _ = print.write_str("\n");
         }
     };
 }
