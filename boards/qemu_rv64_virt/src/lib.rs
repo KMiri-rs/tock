@@ -694,9 +694,11 @@ pub unsafe fn start() -> (
     chip.enable_plic_interrupts();
 
     // enable interrupts globally
+    #[cfg(not(miri))]
     csr::CSR
         .mie
         .modify(csr::mie::mie::mext::SET + csr::mie::mie::msoft::SET + csr::mie::mie::mtimer::SET);
+    #[cfg(not(miri))]
     csr::CSR.mstatus.modify(csr::mstatus::mstatus::mie::SET);
 
     // ---------- FINAL SYSTEM INITIALIZATION ----------
