@@ -7,7 +7,13 @@
 use kernel::utilities::StaticRef;
 use sifive::plic::{Plic, PlicRegisters};
 
-pub const PLIC_BASE: StaticRef<PlicRegisters> =
-    unsafe { StaticRef::new(0x0c00_0000 as *const PlicRegisters) };
+pub fn plic() -> &'static mut Plic {
+    unsafe {
+        kernel::static_init!(
+            Plic,
+            Plic::new(StaticRef::new(0x0c00_0000 as *const PlicRegisters))
+        )
+    }
+}
 
-pub static mut PLIC: Plic = Plic::new(PLIC_BASE);
+// pub static mut PLIC: Plic = Plic::new(plic_base());

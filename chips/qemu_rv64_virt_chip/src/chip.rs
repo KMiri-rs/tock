@@ -5,7 +5,6 @@
 //! High-level setup and interrupt mapping for the chip.
 
 use core::fmt::Write;
-use core::ptr::addr_of;
 
 use kernel::debug;
 use kernel::hil::time::Freq10MHz;
@@ -15,10 +14,10 @@ use kernel::utilities::registers::interfaces::{ReadWriteable, Readable};
 
 use rv64i::csr::{CSR, mcause, mie::mie, mip::mip};
 
-use crate::plic::PLIC;
 use sifive::plic::Plic;
 
 use crate::interrupts;
+use crate::plic::plic;
 
 use virtio::transports::mmio::VirtIOMMIODevice;
 
@@ -84,7 +83,7 @@ impl<'a, I: InterruptService + 'a> QemuRv64VirtChip<'a, I> {
         Self {
             userspace_kernel_boundary: rv64i::syscall::SysCall::new(),
             pmp: rv64i::pmp::PMPUserMPU::new(pmp),
-            plic: &*addr_of!(PLIC),
+            plic: plic(),
             timer,
             plic_interrupt_service,
         }
@@ -229,13 +228,14 @@ unsafe fn handle_interrupt(intr: mcause::Interrupt) {
             // Claim the interrupt, unwrap() as we know an interrupt exists
             // Once claimed this interrupt won't fire until it's completed
             // NOTE: The interrupt is no longer pending in the PLIC
+            let plic = plic();
             loop {
-                let interrupt = (*addr_of!(PLIC)).next_pending();
+                let interrupt = plic.next_pending();
 
                 match interrupt {
                     Some(irq) => {
                         // Safe as interrupts are disabled
-                        (*addr_of!(PLIC)).save_interrupt(irq);
+                        plic.save_interrupt(irq);
                     }
                     None => {
                         // Enable generic interrupts
