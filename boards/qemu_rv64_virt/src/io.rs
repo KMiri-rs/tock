@@ -43,5 +43,5 @@ unsafe fn panic_fmt(pi: &PanicInfo) -> ! {
     } else {
         kernel::miri_println!("Panic: {msg}");
     }
-    core::intrinsics::abort()
+    core::intrinsics::abort_immediate()
 }
